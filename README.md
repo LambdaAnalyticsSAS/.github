@@ -82,7 +82,6 @@
 
 ###
 
-<img src="https://raw.githubusercontent.com/lambdaAnalyticsSAS/lambdaAnalyticsSAS/output/snake.svg" alt="Snake animation" />
 
 ###
 
