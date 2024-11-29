@@ -1,5 +1,5 @@
 <div align="center">
-  <img height="90" src="https://lambdaanalytics.co/wp-content/uploads/2021/03/Logo-Lambda-wh-300x111.png](https://lambdaanalytics.co/wp-content/uploads/2020/02/Logo-LAMBDA-Blanco-Lima-Neon.png"  />
+  <img height="90" src="https://lambdaanalytics.co/wp-content/uploads/2020/02/Logo-LAMBDA-Blanco-Lima-Neon.png"  />
 </div>
 
 ###
