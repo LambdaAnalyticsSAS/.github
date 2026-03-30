@@ -1,0 +1,50 @@
+# Workflow de QA Guardian para Lambda Analytics
+#
+# Este archivo va en cada repositorio en: .github/workflows/qa-guardian.yml
+# Es el "gatillo" que llama al servidor central de QA Guardian cuando
+# se abre o actualiza un Pull Request hacia la rama 'qa'.
+#
+# El workflow es deliberadamente minimalista — toda la lógica está en
+# el servidor central, no aquí.
+#
+# Configuración requerida en la organización (Organization Secrets):
+#   QA_GUARDIAN_URL    - URL del servidor (ej: https://qa.lambdaanalytics.co)
+#   QA_GUARDIAN_TOKEN  - Token de autenticación del servidor
+#
+
+name: QA Guardian
+
+on:
+  pull_request:
+    branches:
+      - qa          # Solo analiza PRs hacia la rama 'qa'
+    types:
+      - opened      # PR nuevo
+      - synchronize # Nuevo commit en PR existente
+      - reopened    # PR que fue cerrado y se reabrió
+
+jobs:
+  qa-guardian:
+    name: Análisis de QA Guardian
+    runs-on: ubuntu-latest
+    # Timeout generoso para análisis con IA (máx 10 minutos)
+    timeout-minutes: 10
+
+    steps:
+      - name: Notificar a QA Guardian
+        # Llama al servidor central con los datos del PR
+        # El servidor procesa el análisis y actualiza el GitHub Check
+        run: |
+          curl --fail --silent --show-error \
+            --max-time 30 \
+            --request POST \
+            --header "Content-Type: application/json" \
+            --header "Authorization: Bearer ${{ secrets.QA_GUARDIAN_TOKEN }}" \
+            --data '{
+              "repo": "${{ github.repository }}",
+              "pr_number": ${{ github.event.number }},
+              "sha": "${{ github.event.pull_request.head.sha }}",
+              "action": "${{ github.event.action }}"
+            }' \
+            "${{ secrets.QA_GUARDIAN_URL }}/trigger"
+        continue-on-error: true
